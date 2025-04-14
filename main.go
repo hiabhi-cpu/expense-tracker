@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "github.com/hiabhi-cpu/expense-tracker/internal/config"
 
 func main() {
-	fmt.Println("hello")
+	con := &config.Config{Name: "abhi"}
+	repl(con)
 }
