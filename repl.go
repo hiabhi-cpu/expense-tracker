@@ -17,15 +17,11 @@ func repl(con *config.Config) {
 		RegisterCommands: make(map[string]commands.Command),
 	}
 
-	helloCommand := commands.Command{
-		Name:        "hello",
-		CommandFunc: commands.HelloCommand,
-	}
-
-	cmds.Register("hello", helloCommand)
+	cmds.Register("hello", "hello", commands.HelloCommand)
+	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", commands.AddCommand)
 
 	for {
-		fmt.Print("Pokedex > ")
+		fmt.Print("$ Tracker > ")
 		reader.Scan()
 
 		words := cleanInput(reader.Text())
@@ -34,6 +30,10 @@ func repl(con *config.Config) {
 		}
 		commandName := words[0]
 		// parameters := words[1:]
+		if commandName == "help" {
+			cmds.ListCommands()
+			continue
+		}
 		err := cmds.CommandExists(commandName)
 		if err != nil {
 			fmt.Println(err)
