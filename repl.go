@@ -17,8 +17,8 @@ func repl(con *config.Config) {
 		RegisterCommands: make(map[string]commands.Command),
 	}
 
-	cmds.Register("hello", "hello", commands.HelloCommand)
-	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", commands.AddCommand)
+	cmds.Register("hello", "", "Say hello", commands.HelloCommand)
+	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", "Add an expense", commands.AddCommand)
 
 	for {
 		fmt.Print("$ Tracker > ")

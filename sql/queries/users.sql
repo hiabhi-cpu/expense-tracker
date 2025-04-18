@@ -7,3 +7,4 @@ INSERT INTO users (
     $2
 )
 RETURNING *;
+

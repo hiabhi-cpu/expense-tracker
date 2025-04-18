@@ -2,7 +2,11 @@ module github.com/hiabhi-cpu/expense-tracker
 
 go 1.24.0
 
-require github.com/fatih/color v1.18.0
+require (
+	github.com/fatih/color v1.18.0
+	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
+)
 
 require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
