@@ -32,3 +32,15 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	err := row.Scan(&i.UserID, &i.UserName, &i.UserPassword)
 	return i, err
 }
+
+const getUser = `-- name: GetUser :one
+SELECT user_id, user_name, user_password FROM users
+WHERE user_name like $1
+`
+
+func (q *Queries) GetUser(ctx context.Context, userName sql.NullString) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, userName)
+	var i User
+	err := row.Scan(&i.UserID, &i.UserName, &i.UserPassword)
+	return i, err
+}

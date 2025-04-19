@@ -18,6 +18,7 @@ func repl(con *config.Config) {
 	}
 
 	cmds.Register("hello", "", "Say hello", commands.HelloCommand)
+	cmds.Register("signup", "--name <USER_NAME> --password <PASSWORD>", "Sign Up", commands.AddUserCommand)
 	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", "Add an expense", commands.AddCommand)
 
 	for {
@@ -29,17 +30,22 @@ func repl(con *config.Config) {
 			continue
 		}
 		commandName := words[0]
-		// parameters := words[1:]
+		parameters := words[1:]
 		if commandName == "help" {
 			cmds.ListCommands()
 			continue
+		} else if commandName == "exit" {
+			break
 		}
 		err := cmds.CommandExists(commandName)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		cmds.Run(con, commandName)
+		err = cmds.Run(con, commandName, parameters)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 

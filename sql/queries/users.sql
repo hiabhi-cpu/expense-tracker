@@ -8,3 +8,6 @@ INSERT INTO users (
 )
 RETURNING *;
 
+-- name: GetUser :one
+SELECT * FROM users
+WHERE user_name like $1;

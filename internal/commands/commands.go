@@ -31,11 +31,12 @@ func (c *Commands) Register(name string, argsList string, cmdDesc string, f func
 	c.RegisterCommands[name] = comm
 }
 
-func (c *Commands) Run(con *config.Config, cmdName string) error {
+func (c *Commands) Run(con *config.Config, cmdName string, parameters []string) error {
 	cmd, e := c.RegisterCommands[cmdName]
 	if !e {
 		return errors.New("Command not found")
 	}
+	cmd.Args = parameters
 	return cmd.CommandFunc(con, cmd)
 }
 
