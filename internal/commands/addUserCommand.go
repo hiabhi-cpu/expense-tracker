@@ -15,7 +15,7 @@ func AddUserCommand(con *config.Config, cmd Command) error {
 	if len(cmd.Args) != 4 {
 		return errors.New("Not enough Arguments")
 	}
-	username, password, err := getUserNamePassword(cmd.Args)
+	username, password, err := GetUserNamePassword(cmd.Args)
 	if err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func AddUserCommand(con *config.Config, cmd Command) error {
 	return nil
 }
 
-func getUserNamePassword(args []string) (username, password string, err error) {
+func GetUserNamePassword(args []string) (username, password string, err error) {
 	j := 0
 	for i, str := range args {
 		if str == "--name" && i == 0 {
