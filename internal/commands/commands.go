@@ -7,6 +7,8 @@ import (
 	"github.com/fatih/color"
 
 	"github.com/hiabhi-cpu/expense-tracker/internal/config"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Command struct {
@@ -76,4 +78,31 @@ func (c *Commands) PrintCommand(cmdName string, cmd Command) {
 		}
 	}
 	fmt.Println("\n")
+}
+
+func GetUserNamePassword(args []string) (username, password string, err error) {
+	j := 0
+	for i, str := range args {
+		if str == "--name" && i == 0 {
+			username = args[i+1]
+			j++
+		} else if str == "--password" && i == 2 {
+			password = args[i+1]
+			j++
+		}
+	}
+	if j != 2 {
+		err = errors.New("Pass Arguments correctly")
+	}
+	return
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
+}
+
+func CheckPassword(hashedPassword, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	return err == nil
 }

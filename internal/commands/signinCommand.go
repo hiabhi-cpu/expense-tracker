@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/hiabhi-cpu/expense-tracker/internal/config"
@@ -19,16 +20,16 @@ func SignInCommand(con *config.Config, cmd Command) error {
 	}
 	ctx := context.Background()
 	user, err := con.Db.GetUser(ctx, sql.NullString{String: username, Valid: true})
-	if strings.Contains(err.Error(), "no rows in result") {
-		return errors.New("User does not exist")
-	}
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") {
+			return errors.New("User already exists")
+		}
 		return err
 	}
-	if user.UserPassword.String != password {
+	if !CheckPassword(user.UserPassword.String, password) {
 		return errors.New("Password does not match")
 	}
 
-	// fmt.Println(newUser.UserName.String + " created")
+	fmt.Println("Hello" + user.UserName.String)
 	return nil
 }

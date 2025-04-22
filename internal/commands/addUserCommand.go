@@ -20,34 +20,22 @@ func AddUserCommand(con *config.Config, cmd Command) error {
 		return err
 	}
 	ctx := context.Background()
+	hashedPass, err := HashPassword(password)
+	if err != nil {
+		return errors.New("Password could not be hashed")
+	}
+	// fmt.Println(hashedPass)
 	newUser, err := con.Db.CreateUser(ctx, database.CreateUserParams{
 		UserName:     sql.NullString{String: username, Valid: true},
-		UserPassword: sql.NullString{String: password, Valid: true},
+		UserPassword: sql.NullString{String: hashedPass, Valid: true},
 	})
-	if strings.Contains(err.Error(), "duplicate key") {
-		return errors.New("User already exist")
-	}
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") {
+			return errors.New("User already exists")
+		}
 		return err
 	}
 
 	fmt.Println(newUser.UserName.String + " created")
 	return nil
-}
-
-func GetUserNamePassword(args []string) (username, password string, err error) {
-	j := 0
-	for i, str := range args {
-		if str == "--name" && i == 0 {
-			username = args[i+1]
-			j++
-		} else if str == "--password" && i == 2 {
-			password = args[i+1]
-			j++
-		}
-	}
-	if j != 2 {
-		err = errors.New("Pass Arguments correctly")
-	}
-	return
 }
