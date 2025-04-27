@@ -7,6 +7,6 @@ import (
 )
 
 func HelloCommand(con *config.Config, cmd Command) error {
-	fmt.Println(con.Name)
+	fmt.Println("HEllo")
 	return nil
 }

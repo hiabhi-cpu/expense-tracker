@@ -20,6 +20,7 @@ func repl(con *config.Config) {
 	cmds.Register("hello", "", "Say hello", commands.HelloCommand)
 	cmds.Register("signup", "--name <USER_NAME> --password <PASSWORD>", "Sign Up", commands.AddUserCommand)
 	cmds.Register("signin", "--name <USER_NAME> --password <PASSWORD>", "Sign in", commands.SignInCommand)
+	cmds.Register("signout", "", "Sign Out", commands.SignOutCommand)
 	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", "Add an expense", commands.AddCommand)
 
 	for {

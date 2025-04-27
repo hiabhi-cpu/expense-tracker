@@ -37,5 +37,6 @@ func AddUserCommand(con *config.Config, cmd Command) error {
 	}
 
 	fmt.Println(newUser.UserName.String + " created")
+	con.User = newUser
 	return nil
 }

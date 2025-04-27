@@ -23,6 +23,6 @@ func main() {
 		log.Fatal(err)
 	}
 	dbQueries := database.New(db)
-	con := &config.Config{Name: "abhi", Db: dbQueries}
+	con := &config.Config{Db: dbQueries}
 	repl(con)
 }

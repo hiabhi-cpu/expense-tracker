@@ -31,5 +31,6 @@ func SignInCommand(con *config.Config, cmd Command) error {
 	}
 
 	fmt.Println("Hello" + user.UserName.String)
+	con.User = user
 	return nil
 }
