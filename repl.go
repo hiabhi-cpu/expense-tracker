@@ -21,7 +21,7 @@ func repl(con *config.Config) {
 	cmds.Register("signup", "--name <USER_NAME> --password <PASSWORD>", "Sign Up", commands.AddUserCommand)
 	cmds.Register("signin", "--name <USER_NAME> --password <PASSWORD>", "Sign in", commands.SignInCommand)
 	cmds.Register("signout", "", "Sign Out", commands.SignOutCommand)
-	cmds.Register("add", "--description \"<DESCRIPTION>\" --amount <AMOUNT>", "Add an expense", commands.AddCommand)
+	cmds.Register("add", "--desc <DESCRIPTION_NAME> --amt <AMOUNT>", "Add an expense", commands.AddMoneyCommand)
 
 	for {
 		fmt.Print("$ Tracker > ")

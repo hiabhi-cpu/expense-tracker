@@ -8,6 +8,14 @@ import (
 	"database/sql"
 )
 
+type Money struct {
+	MonID   int32
+	MonDesc sql.NullString
+	Amt     sql.NullInt32
+	UserID  sql.NullInt32
+	MonDate sql.NullTime
+}
+
 type User struct {
 	UserID       int32
 	UserName     sql.NullString
