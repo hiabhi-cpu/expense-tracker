@@ -49,3 +49,38 @@ func (q *Queries) CreateMoney(ctx context.Context, arg CreateMoneyParams) (Money
 	)
 	return i, err
 }
+
+const getAllMoney = `-- name: GetAllMoney :many
+SELECT mon_id, mon_desc, amt, user_id, mon_date FROM money
+WHERE user_id = $1 
+ORDER BY mon_date
+`
+
+func (q *Queries) GetAllMoney(ctx context.Context, userID sql.NullInt32) ([]Money, error) {
+	rows, err := q.db.QueryContext(ctx, getAllMoney, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Money
+	for rows.Next() {
+		var i Money
+		if err := rows.Scan(
+			&i.MonID,
+			&i.MonDesc,
+			&i.Amt,
+			&i.UserID,
+			&i.MonDate,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

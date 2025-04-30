@@ -11,3 +11,8 @@ INSERT INTO money (
     $4
 )
 RETURNING *;
+
+-- name: GetAllMoney :many
+SELECT * FROM money
+WHERE user_id = $1 
+ORDER BY mon_date;
