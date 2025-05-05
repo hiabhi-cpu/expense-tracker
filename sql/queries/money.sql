@@ -16,3 +16,8 @@ RETURNING *;
 SELECT * FROM money
 WHERE user_id = $1 
 ORDER BY mon_date;
+
+-- name: UpdateMoney :exec
+UPDATE money 
+set amt = $3
+where mon_id =$1 and user_id=$2;

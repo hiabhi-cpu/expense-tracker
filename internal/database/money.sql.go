@@ -84,3 +84,20 @@ func (q *Queries) GetAllMoney(ctx context.Context, userID sql.NullInt32) ([]Mone
 	}
 	return items, nil
 }
+
+const updateMoney = `-- name: UpdateMoney :exec
+UPDATE money 
+set amt = $3
+where mon_id =$1 and user_id=$2
+`
+
+type UpdateMoneyParams struct {
+	MonID  int32
+	UserID sql.NullInt32
+	Amt    sql.NullInt32
+}
+
+func (q *Queries) UpdateMoney(ctx context.Context, arg UpdateMoneyParams) error {
+	_, err := q.db.ExecContext(ctx, updateMoney, arg.MonID, arg.UserID, arg.Amt)
+	return err
+}
