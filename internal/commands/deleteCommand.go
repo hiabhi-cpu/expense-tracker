@@ -11,20 +11,16 @@ import (
 	"github.com/hiabhi-cpu/expense-tracker/internal/database"
 )
 
-func UpdateCommand(con *config.Config, cmd Command) error {
+func DeleteCommand(con *config.Config, cmd Command) error {
 	if con.User.UserName.String == "" {
 		return errors.New("Please singin before adding anything")
 	}
-	if len(cmd.Args) != 4 {
+	if len(cmd.Args) != 2 {
 		return errors.New("Not enough arguments")
 	}
-	id, amt, err := GetMoneyId(cmd.Args)
+	id, err := GetId(cmd.Args)
 	if err != nil {
 		return err
-	}
-	amtInt, err := strconv.Atoi(amt)
-	if err != nil {
-		return errors.New("Enter correct amount in integer")
 	}
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
@@ -37,35 +33,30 @@ func UpdateCommand(con *config.Config, cmd Command) error {
 	}
 
 	if dbMon.UserID.Int32 != con.User.UserID {
-		return errors.New("U cannot update the other user money")
+		return errors.New("U cannot delete the other user money")
 	}
-	err = con.Db.UpdateMoney(ctx, database.UpdateMoneyParams{
+	err = con.Db.DeleteMoney(ctx, database.DeleteMoneyParams{
 		MonID:  int32(idInt),
 		UserID: sql.NullInt32{Int32: int32(con.User.UserID), Valid: true},
-		Amt:    sql.NullInt32{Int32: int32(amtInt), Valid: true},
 	})
 	if err != nil {
-		return errors.New("Could not update")
+		return errors.New("Could not delete Id does not exist")
 	}
-	fmt.Println("Updated the expense")
+	fmt.Println("Deleted the expense")
+
 	return nil
 }
 
-func GetMoneyId(args []string) (desc, amt string, err error) {
+func GetId(args []string) (id string, err error) {
 	j := 0
 	for i, str := range args {
 		if str == "--id" && i == 0 {
-			desc = args[i+1]
-			j++
-		} else if str == "--amt" && i == 2 {
-			amt = args[i+1]
+			id = args[i+1]
 			j++
 		}
 	}
-	if j != 2 {
+	if j != 1 {
 		err = errors.New("Pass Arguments correctly")
 	}
 	return
 }
-
-// func isCorrectuserId()

@@ -39,7 +39,7 @@ func AddMoneyCommand(con *config.Config, cmd Command) error {
 		fmt.Println(err)
 		return errors.New("Unable to add money")
 	}
-	fmt.Println(newMoney)
+	fmt.Println(newMoney.MonID, "\t", newMoney.MonDesc, "\t", newMoney.Amt)
 	fmt.Println("Added money")
 	return nil
 }

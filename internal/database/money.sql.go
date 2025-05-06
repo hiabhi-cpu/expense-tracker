@@ -50,6 +50,21 @@ func (q *Queries) CreateMoney(ctx context.Context, arg CreateMoneyParams) (Money
 	return i, err
 }
 
+const deleteMoney = `-- name: DeleteMoney :exec
+DELETE FROM money
+where mon_id = $1 and user_id=$2
+`
+
+type DeleteMoneyParams struct {
+	MonID  int32
+	UserID sql.NullInt32
+}
+
+func (q *Queries) DeleteMoney(ctx context.Context, arg DeleteMoneyParams) error {
+	_, err := q.db.ExecContext(ctx, deleteMoney, arg.MonID, arg.UserID)
+	return err
+}
+
 const getAllMoney = `-- name: GetAllMoney :many
 SELECT mon_id, mon_desc, amt, user_id, mon_date FROM money
 WHERE user_id = $1 
@@ -83,6 +98,24 @@ func (q *Queries) GetAllMoney(ctx context.Context, userID sql.NullInt32) ([]Mone
 		return nil, err
 	}
 	return items, nil
+}
+
+const getMoneyPerId = `-- name: GetMoneyPerId :one
+SELECT mon_id, mon_desc, amt, user_id, mon_date FROM money
+where mon_id =$1
+`
+
+func (q *Queries) GetMoneyPerId(ctx context.Context, monID int32) (Money, error) {
+	row := q.db.QueryRowContext(ctx, getMoneyPerId, monID)
+	var i Money
+	err := row.Scan(
+		&i.MonID,
+		&i.MonDesc,
+		&i.Amt,
+		&i.UserID,
+		&i.MonDate,
+	)
+	return i, err
 }
 
 const updateMoney = `-- name: UpdateMoney :exec

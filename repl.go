@@ -24,6 +24,7 @@ func repl(con *config.Config) {
 	cmds.Register("add", "--desc <DESCRIPTION_NAME> --amt <AMOUNT>", "Add an expense", commands.AddMoneyCommand)
 	cmds.Register("view", "", "View past records", commands.ViewAllMoney)
 	cmds.Register("update", "--id <MONEY_ID> --amt <AMOUNT>", "Update an expense", commands.UpdateCommand)
+	cmds.Register("delete", "--id <MONEY_ID>", "Delete an Expense", commands.DeleteCommand)
 
 	for {
 		fmt.Print("$ Tracker > ")
