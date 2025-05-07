@@ -134,3 +134,17 @@ func (q *Queries) UpdateMoney(ctx context.Context, arg UpdateMoneyParams) error 
 	_, err := q.db.ExecContext(ctx, updateMoney, arg.MonID, arg.UserID, arg.Amt)
 	return err
 }
+
+const viewSummary = `-- name: ViewSummary :one
+SELECT SUM(amt)
+from money
+where user_id = $1 
+GROUP BY user_id
+`
+
+func (q *Queries) ViewSummary(ctx context.Context, userID sql.NullInt32) (int64, error) {
+	row := q.db.QueryRowContext(ctx, viewSummary, userID)
+	var sum int64
+	err := row.Scan(&sum)
+	return sum, err
+}

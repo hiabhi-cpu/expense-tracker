@@ -29,3 +29,9 @@ where mon_id =$1 and user_id=$2;
 -- name: DeleteMoney :exec
 DELETE FROM money
 where mon_id = $1 and user_id=$2;
+
+-- name: ViewSummary :one
+SELECT SUM(amt)
+from money
+where user_id = $1 
+GROUP BY user_id;
