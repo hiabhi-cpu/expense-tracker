@@ -8,6 +8,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createMoney = `-- name: CreateMoney :one
@@ -144,6 +145,25 @@ GROUP BY user_id
 
 func (q *Queries) ViewSummary(ctx context.Context, userID sql.NullInt32) (int64, error) {
 	row := q.db.QueryRowContext(ctx, viewSummary, userID)
+	var sum int64
+	err := row.Scan(&sum)
+	return sum, err
+}
+
+const viewSummaryMonth = `-- name: ViewSummaryMonth :one
+SELECT SUM(amt)
+from money
+where user_id = $1
+and DATE_TRUNC('month', mon_date) = DATE_TRUNC('month', $2::date)
+`
+
+type ViewSummaryMonthParams struct {
+	UserID  sql.NullInt32
+	Column2 time.Time
+}
+
+func (q *Queries) ViewSummaryMonth(ctx context.Context, arg ViewSummaryMonthParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, viewSummaryMonth, arg.UserID, arg.Column2)
 	var sum int64
 	err := row.Scan(&sum)
 	return sum, err

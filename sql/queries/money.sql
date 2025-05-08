@@ -35,3 +35,9 @@ SELECT SUM(amt)
 from money
 where user_id = $1 
 GROUP BY user_id;
+
+-- name: ViewSummaryMonth :one
+SELECT SUM(amt)
+from money
+where user_id = $1
+and DATE_TRUNC('month', mon_date) = DATE_TRUNC('month', $2::date);
