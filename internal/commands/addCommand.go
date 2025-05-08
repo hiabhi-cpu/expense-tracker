@@ -28,6 +28,9 @@ func AddMoneyCommand(con *config.Config, cmd Command) error {
 	if err != nil {
 		return errors.New("Enter correct amount in integer")
 	}
+	if amtInt < 0 {
+		return errors.New("Amount should not be negative")
+	}
 	ctx := context.Background()
 	newMoney, err := con.Db.CreateMoney(ctx, database.CreateMoneyParams{
 		MonDesc: sql.NullString{String: desc, Valid: true},
